@@ -62,6 +62,16 @@ With empty input the Actor returns the 100 newest open tenders across all countr
 2. Schedule it daily (TED publishes Monday to Friday).
 3. Connect the dataset to Slack, email, Google Sheets or Zapier/Make with Apify integrations.
 
+## Run it locally (free, no account)
+`ted-tenders.mjs` in this repo is a single-file, zero-dependency command-line version (Node 18+) of the same logic, calling the official TED Search API directly. Good for a one-off export or a daily cron job; use the hosted Actor if you want scheduling, storage and integrations without running anything.
+```bash
+curl -O https://raw.githubusercontent.com/datakit457/ted-tenders-feed/main/ted-tenders.mjs
+node ted-tenders.mjs --cpv 72000000 --countries IRL,DEU --days 7 > tenders.csv
+# daily alert: only notices not seen on the previous run (state kept in .ted-seen.json)
+node ted-tenders.mjs --keywords "cloud hosting" --new --format jsonl
+```
+Options: `--cpv` (8-digit codes), `--countries` (ISO alpha-3), `--keywords`, `--kind competition|result|planning|all`, `--days 1-90`, `--max N`, `--lang eng`, `--new [--state file]`, `--format csv|jsonl`.
+
 ## Call it from code
 ```python
 from apify_client import ApifyClient
